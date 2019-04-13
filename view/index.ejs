@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<title>Index Page</title>
+</head>
+<body>
+	<div class="jumbotron text-center">
+		<h1>Job vaccancies</h1>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-xs-6">
+				<a href="127.0.0.1:3000/add" class="btn btn-primary btn-block" role="button">Create</a>
+			</div>
+			<div class="col-sm-6 col-xs-6">
+				<a href="127.0.0.1:3000/read" class="btn btn-info btn-block" role="button">Read</a>
+			</div>
+		</div>
+		<div class="row" style="padding-top: 40px">
+			<p class="lead"><%= result %></p>
+			<ul>
+				<% for(var i in listItem){%>
+				<%- listItem[i] %>
+				<%}%>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

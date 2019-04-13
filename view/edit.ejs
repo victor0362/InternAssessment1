@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<title>Edit <%= orig[0].JobID%> <%= orig[0].employer%>: <%= orig[0].JobTitle%></title>
+</head>
+<body>
+	<div class="jumbotron text-center">
+		<h1>Job vaccancies</h1>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-xs-6">
+				<a href="../add" class="btn btn-primary btn-block" role="button">Create</a>
+			</div>
+			<div class="col-sm-6 col-xs-6">
+				<a href="../read" class="btn btn-info btn-block" role="button">Read</a>
+			</div>
+		</div>
+	</div>
+	<div class="container" style="padding-top: 20px; padding-bottom: 20px">
+		<h2>Edit Job: <%= orig[0].JobID%> form:</h2>
+		<p>If need to change <strong>employer, job title, and job function</strong>, User need to add the attribute in the <strong>"Create"</strong> page</p>
+		<form action="../api/edit" method="post" accept-charset="utf-8">
+			<div class="form-group" method="post">
+				<label for="JobID">Job Number:</label>
+				<input type="text" class="form-control" name="JobID" id="JobID" value="<%= orig[0].JobID%>" readonly required>
+			</div>
+			<div class="form-group">
+				<label for="jobTitle">Job Title</label>
+				<select class="form-control" id="jobTitle" name="jobTitle" required>
+					<% for (var i=0; i< Jtitle.length; i++){ %>
+					<option value="<%= Jtitle[i].JobTitleID%>"<%=(Jtitle[i].JobTitle==orig[0].JobTitle)? "selected":""%> required><%= Jtitle[i].JobTitle %></option>
+					<% } %>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="Date">Date (YYYY-MM-DD):</label>
+				<%_ var date="", month="";
+					date = (orig[0].Date.getDate()>9)? `${orig[0].Date.getDate()}`:`0${orig[0].Date.getDate()}`;
+					month = (orig[0].Date.getMonth()>8)? `${orig[0].Date.getMonth()}` : `0${orig[0].Date.getMonth()}`;
+				-%>
+				<input type="date" class="form-control" name="date" id="date" required value="<%= `${orig[0].Date.getFullYear()}-${month}-${date}`%>">
+			</div>
+			<div class="form-group">
+				<label for="employer">Company / Employer:</label>
+				<!--<input type="text" class="form-control" name="Employer" id="Employer" value="<%=orig[0].employer%>" required>-->
+				<select class="form-control" id="employer" name="employer" required>
+					<% for (var i=0; i< employers.length; i++){ %>
+					<option value="<%= employers[i].EmployerID%>"<%=(employers[i].employer==orig[0].employer)? "selected":""%> required><%= employers[i].employer %></option>
+					<% } %>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="Requirement">Requirement: (start with &#34;- &#34; in every single line</label>
+				<textarea name="Requirement" id="Requirement" class="form-control" style="height:100px;" placeholder="type the Requirement here" required>
+					<%_	var require = `${orig[0].Requirement}`;
+						var store = "";
+						for(var k=0; k < require.length-1;k++){ 
+							var str = require.charAt(k)+require.charAt(k+1);
+							if(require.charAt(k)=="\n"){
+								store = store + require.charAt(k);-%>
+<%= store -%>
+					<%_			store = "";
+							} else {
+								store= store+require.charAt(k);
+					 		} 
+						}-%>
+<%= store+require.charAt(require.length-1)-%></textarea>
+			</div>
+			<div class="form-group">
+				<label for="ExpYrs">Year of Experience</label>
+				<input type="number" class="form-control" name="ExpYrs" id="ExpYrs" value="<%=orig[0].YearOfExp%>" required>
+			</div>
+			<div class="form-group">
+				<label for="vac">Vacancies</label>
+				<input type="number" class="form-control" name="vac" id="vac" value="<%= orig[0].Vacancies%>" required>
+			</div>
+			<div class="form-group">
+				<label for="jobFun">Job Function</label>
+				<select multiple class="form-control" id="jobFun" name="jobFun" required>
+					<% for (var i=0; i< JobFun.length; i++){ %>
+					<option value="<%= JobFun[i].JobFunctionID %>">
+						<%= JobFun[i].Nature %>>
+						<%= JobFun[i].JobFunctionName %>
+					</option>
+					<% } %>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-info">Submit</button>
+		</form>
+	</div>
+</div>
+</body>
+</html>

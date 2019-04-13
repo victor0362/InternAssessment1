@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+ 	<script type="text/javascript">
+ 		function EditByID(jobID) {
+ 			window.location.href="./editByID?id="+jobID;
+ 		}
+ 		function DeleteByID(jobID){
+ 			if (confirm(`You are going to delete Job with JobID: ${jobID}`)) {
+ 				var form = document.createElement("form");
+				form.setAttribute("method", "post");
+				form.setAttribute("action", "./api/deleteByID");
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "hidden");
+				hiddenField.setAttribute("name", "id");
+				hiddenField.setAttribute("value", jobID);
+	            form.appendChild(hiddenField);
+	            document.body.appendChild(form);
+				form.submit();
+ 			}
+ 		}
+ 	</script>
+	<title>Read Job</title>
+</head>
+<body>
+	<div class="jumbotron text-center">
+		<h1>Job vacancies</h1>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-xs-6">
+				<a href="../add" class="btn btn-primary btn-block" role="button">Create</a>
+			</div>
+			<div class="col-sm-6 col-xs-6">
+				<a href="../read" class="btn btn-info btn-block" role="button">Read</a>
+			</div>
+		</div>
+	</div>
+	<div class="container" style="padding-top: 20px; padding-bottom: 20px">
+		<h2>Job Vacancines:</h2>
+		<div class="row">
+			<table class="table table-bordered">
+				<tbody>
+					<% for (var i=0; i< job.length; i++) {%>
+					<tr>
+						<td style="background-color: rgb(211,211,211)">Job No. : <%= job[i].JobID%></td>
+						<td style="background-color: rgb(211,211,211)">Date :<%= job[i].Date %></td>
+						<td rowspan="2"></td> 
+					</tr>
+					<tr>
+						<td colspan="2">Job Title: <%= job[i].JobTitle %></td>
+					</tr>
+					<tr>
+						<td colspan="3">Vacancies: <%= job[i].Vacancies %></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							Requirements:
+							<% 	var require = job[i].Requirement.toString();
+								var store = "";
+								for(var k=0; k < require.length-1;k++){ 
+									var str = require.charAt(k)+require.charAt(k+1);
+									if(str === "- "){%>
+							<%= store %>
+							<br>	
+							<%			store = require.charAt(k);
+									} else {
+										store= store+require.charAt(k);
+							 		} 
+								}%>
+							<%= store+require.charAt(require.length-1)%>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">Years Of Experience: <%= job[i]. YearOfExp%> years</td>
+					</tr>
+					<tr>
+						<td>Job Function(s)</td>
+						<td colspan="2">
+							<% for (var j=0; j< fun.length; j++){ %>
+							<% if(fun[j].JobID === job[i].JobID){ %>
+							<p><%= fun[j].Nature %>><%= fun[j].JobFunctionName %></p>
+								<% } %>
+							<%} %>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<button type="button" class="btn btn-block btn-info" onclick="EditByID('<%= job[i].JobID%>')">Edit job</button>
+							<button type="button" class="btn btn-block btn-danger" onclick="DeleteByID('<%= job[i].JobID%>')">Delete job</button>
+						</td>
+					</tr>
+					<% } %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+</html>
